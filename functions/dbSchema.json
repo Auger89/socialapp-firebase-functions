@@ -1,0 +1,11 @@
+{
+	"screams": [
+		{
+			"userHandle": "string",
+			"body": "string",
+			"createdAd": "ISOString",
+			"likeCount": "number",
+			"commentCount": "number"
+		}
+	]
+}
