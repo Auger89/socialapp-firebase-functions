@@ -1,3 +1,5 @@
+const { db } = require("./admin");
+
 module.exports = (req, res, next) => {
   const {
     headers: { authorization }
