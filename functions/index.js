@@ -1,7 +1,12 @@
 const functions = require("firebase-functions");
 const express = require("express");
 const { getAllScreams, createScream } = require("./handlers/screams");
-const { signup, login, uploadImage } = require("./handlers/users");
+const {
+  signup,
+  login,
+  uploadImage,
+  addUserDetails
+} = require("./handlers/users");
 const FBAuth = require("./util/fbAuth");
 // Warning!! Google Cloud Functions only supports Node v6, so: Do not use ES6 syntax!
 
@@ -15,5 +20,6 @@ app.post("/scream", FBAuth, createScream);
 app.post("/signup", signup);
 app.post("/login", login);
 app.post("/user/image", FBAuth, uploadImage);
+app.post("/user", FBAuth, addUserDetails);
 
 exports.api = functions.region("europe-west1").https.onRequest(app);

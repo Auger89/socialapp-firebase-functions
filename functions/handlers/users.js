@@ -5,7 +5,11 @@ const os = require("os");
 const fs = require("fs");
 const { db, admin } = require("../util/admin");
 const config = require("../util/config");
-const { validateSignupData, validateLoginData } = require("../util/validators");
+const {
+  validateSignupData,
+  validateLoginData,
+  reduceUserDetails
+} = require("../util/validators");
 
 firebase.initializeApp(config);
 
@@ -82,6 +86,19 @@ exports.login = (req, res) => {
           .status(403)
           .json({ general: "Wrong credentials. Please try again" });
       }
+      return res.status(500).json({ error: err.code });
+    });
+};
+
+exports.addUserDetails = (req, res) => {
+  const { body, user } = req;
+  let userDetails = reduceUserDetails(body);
+
+  db.doc(`/users/${user.handle}`)
+    .update(userDetails)
+    .then(() => res.json({ message: "Details updated successfully" }))
+    .catch(err => {
+      console.error(err);
       return res.status(500).json({ error: err.code });
     });
 };
