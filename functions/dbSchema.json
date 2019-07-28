@@ -1,11 +1,23 @@
 {
+	"users": [
+		{
+			"createdAt": "2019-07-09T22:21:35.252Z",
+			"email": "user@mail.com",
+			"handle": "user",
+			"imageUrl": "image/220792365.jpg",
+			"userId": "H1C3ZDRnWRVsqS2AmI123GHD123X",
+			"bio": "Hi, I am user!",
+			"website": "http://www.user.com",
+			"location": "London, UK"
+		}
+	],
 	"screams": [
 		{
-			"userHandle": "string",
-			"body": "string",
-			"createdAd": "ISOString",
-			"likeCount": "number",
-			"commentCount": "number"
+			"userHandle": "user",
+			"body": "This is a sample scream",
+			"createdAd": "2019-07-28T16:33:33.750Z",
+			"likeCount": 5,
+			"commentCount": 3
 		}
 	]
 }
