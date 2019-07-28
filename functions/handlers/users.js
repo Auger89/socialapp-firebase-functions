@@ -103,6 +103,31 @@ exports.addUserDetails = (req, res) => {
     });
 };
 
+exports.getAuthenticatedUser = (req, res) => {
+  const { user } = req;
+  let userData = { credentials: {}, likes: [] };
+
+  db.doc(`/users/${user.handle}`)
+    .get()
+    .then(doc => {
+      if (doc.exists) {
+        userData.credentials = doc.data();
+        return db
+          .collection("likes")
+          .where("userhandle", "==", user.handle)
+          .get(0);
+      }
+    })
+    .then(data => {
+      data.forEach(doc => userData.likes.push(doc.data()));
+      return res.json(userData);
+    })
+    .catch(err => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    });
+};
+
 exports.uploadImage = (req, res) => {
   const { headers, user, rawBody } = req;
   const busboy = new BusBoy({ headers });
