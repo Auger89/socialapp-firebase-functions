@@ -1,5 +1,5 @@
 const firebase = require("firebase");
-const Busboy = require("busboy");
+const BusBoy = require("busboy");
 const path = require("path");
 const os = require("os");
 const fs = require("fs");
@@ -88,18 +88,24 @@ exports.login = (req, res) => {
 
 exports.uploadImage = (req, res) => {
   const { headers, user, rawBody } = req;
-  const busboy = new Busboy({ headers });
+  const busboy = new BusBoy({ headers });
 
   let imageToUpload = {};
   let imageFilename;
 
   busboy.on("file", (fieldname, file, filename, encoding, mimetype) => {
+    // console.log(fieldname, file, filename, encoding, mimetype);
+    if (mimetype !== "image/jpeg" && mimetype !== "image/png") {
+      return res.status(400).json({ message: "Wrong file type submitted" });
+    }
+
     const imageExtension = filename.split(".")[filename.split(".").length - 1];
     imageFilename = `${Math.round(
       Math.random() * 10000000000
     )}.${imageExtension}`;
     const filePath = path.join(os.tmpdir(), imageFilename);
     imageToUpload = { filePath, mimetype };
+
     file.pipe(fs.createWriteStream(filePath));
   });
 
@@ -128,6 +134,10 @@ exports.uploadImage = (req, res) => {
         console.error(err);
         return res.status(500).json({ error: err.code });
       });
+  });
+
+  busboy.on("error", err => {
+    console.log("Busboy error: ", err);
   });
 
   busboy.end(rawBody);
