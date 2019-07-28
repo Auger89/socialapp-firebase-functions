@@ -45,3 +45,33 @@ exports.createScream = (req, res) => {
       console.log(err);
     });
 };
+
+exports.getScream = (req, res) => {
+  const { params } = req;
+  let screamData;
+  db.doc(`/screams/${params.screamId}`)
+    .get()
+    .then(doc => {
+      if (!doc.exists) {
+        return res.status(404).json({ error: "Scream not found" });
+      }
+      /* screamData = doc.data();
+      screamData.screamId = doc.id; */
+      screamData = doc.data();
+      screamData.screamId = doc.id;
+      return db
+        .collection("comments")
+        .orderBy("createdAt", "desc")
+        .where("screamId", "==", params.screamId)
+        .get();
+    })
+    .then(data => {
+      screamData.comments = [];
+      data.forEach(doc => screamData.comments.push(doc.data()));
+      return res.json(screamData);
+    })
+    .catch(err => {
+      res.status(500).json({ error: "something went wrong" });
+      console.log(err);
+    });
+};
