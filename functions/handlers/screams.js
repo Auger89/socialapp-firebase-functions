@@ -1,8 +1,8 @@
-const { db } = require("../util/admin");
+const { db } = require('../util/admin');
 
 exports.getAllScreams = (req, res) => {
-  db.collection("screams")
-    .orderBy("createdAt", "desc")
+  db.collection('screams')
+    .orderBy('createdAt', 'desc')
     .get()
     .then(data => {
       let screams = [];
@@ -25,8 +25,8 @@ exports.createScream = (req, res) => {
     body: { body }
   } = req;
 
-  if (body.trim() === "") {
-    return res.status(400).json({ body: "Body must not be empty" });
+  if (body.trim() === '') {
+    return res.status(400).json({ body: 'Body must not be empty' });
   }
 
   const newScream = {
@@ -35,13 +35,13 @@ exports.createScream = (req, res) => {
     createdAt: new Date().toISOString()
   };
 
-  db.collection("screams")
+  db.collection('screams')
     .add(newScream)
     .then(doc =>
       res.json({ message: `document ${doc.id} created successfully` })
     )
     .catch(err => {
-      res.status(500).json({ error: "something went wrong" });
+      res.status(500).json({ error: 'something went wrong' });
       console.log(err);
     });
 };
@@ -53,16 +53,16 @@ exports.getScream = (req, res) => {
     .get()
     .then(doc => {
       if (!doc.exists) {
-        return res.status(404).json({ error: "Scream not found" });
+        return res.status(404).json({ error: 'Scream not found' });
       }
       /* screamData = doc.data();
       screamData.screamId = doc.id; */
       screamData = doc.data();
       screamData.screamId = doc.id;
       return db
-        .collection("comments")
-        .orderBy("createdAt", "desc")
-        .where("screamId", "==", params.screamId)
+        .collection('comments')
+        .orderBy('createdAt', 'desc')
+        .where('screamId', '==', params.screamId)
         .get();
     })
     .then(data => {
@@ -71,7 +71,36 @@ exports.getScream = (req, res) => {
       return res.json(screamData);
     })
     .catch(err => {
-      res.status(500).json({ error: "something went wrong" });
+      res.status(500).json({ error: 'something went wrong' });
       console.log(err);
+    });
+};
+
+exports.commentOnScream = (req, res) => {
+  const { body, user, params } = req;
+  if (!body.body.trim()) {
+    return res.status(400).json({ error: 'Must not be empty' });
+  }
+
+  const newComment = {
+    body: body.body,
+    createdAt: new Date().toISOString(),
+    screamId: params.screamId,
+    userHandle: user.handle,
+    userImage: user.imageUrl
+  };
+
+  db.doc(`/screams/${params.screamId}`)
+    .get()
+    .then(doc => {
+      if (!doc.exists) {
+        return res.status(404).json({ error: 'Scream not found' });
+      }
+      return db.collection('comments').add(newComment);
+    })
+    .then(() => res.json(newComment))
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ error: 'something went wrong' });
     });
 };

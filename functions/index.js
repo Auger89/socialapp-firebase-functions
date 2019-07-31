@@ -3,7 +3,8 @@ const express = require("express");
 const {
   getAllScreams,
   createScream,
-  getScream
+  getScream,
+  commentOnScream
 } = require("./handlers/screams");
 const {
   signup,
@@ -13,7 +14,6 @@ const {
   getAuthenticatedUser
 } = require("./handlers/users");
 const FBAuth = require("./util/fbAuth");
-// Warning!! Google Cloud Functions only supports Node v6, so: Do not use ES6 syntax!
 
 const app = express();
 
@@ -24,7 +24,7 @@ app.get("/scream/:screamId", getScream);
 // TODO delete scream
 // TODO like scream
 // TODO unlike scream
-// TODO comment on scream
+app.post("/scream/:screamId/comment", FBAuth, commentOnScream)
 
 // user routes
 app.post("/signup", signup);
