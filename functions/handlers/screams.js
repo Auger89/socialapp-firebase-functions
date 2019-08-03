@@ -188,3 +188,26 @@ exports.unlikeScream = (req, res) => {
       console.log(err);
     });
 };
+
+// EXAMPLE
+exports.deleteScream = (req, res) => {
+  const { user, params } = req;
+  const screamRef = db.doc(`/screams/${params.screamId}`);
+
+  screamRef
+    .get()
+    .then(docSnapshot => {
+      if (!docSnapshot.exists) {
+        return res.status(404).json({ error: 'Scream not found' });
+      }
+      if (docSnapshot.data().userHandle !== user.handle) {
+        return res.status(403).json({ error: 'Unauthorized' }); // 403 = Forbidden, 401 = Unauthenticated
+      }
+      return screamRef.delete();
+    })
+    .then(() => res.json({ message: 'Scream deleted successfully' }))
+    .catch(err => {
+      res.status(500).json({ error: 'Something went wrong' });
+      console.log(err);
+    });
+};
