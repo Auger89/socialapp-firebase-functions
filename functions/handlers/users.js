@@ -105,7 +105,7 @@ exports.addUserDetails = (req, res) => {
 
 exports.getAuthenticatedUser = (req, res) => {
   const { user } = req;
-  let userData = { credentials: {}, likes: [] };
+  let userData = { credentials: {}, likes: [], notifications: [] };
 
   db.doc(`/users/${user.handle}`)
     .get()
@@ -120,6 +120,19 @@ exports.getAuthenticatedUser = (req, res) => {
     })
     .then(data => {
       data.forEach(doc => userData.likes.push(doc.data()));
+      return db
+        .collection('notifications')
+        .where('recipient', '==', user.handle)
+        .orderBy('createdAt', 'desc')
+        .get();
+    })
+    .then(querySnapshot => {
+      querySnapshot.forEach(docSnapshot =>
+        userData.notifications.push({
+          ...docSnapshot.data(),
+          id: docSnapshot.id
+        })
+      );
       return res.json(userData);
     })
     .catch(err => {
