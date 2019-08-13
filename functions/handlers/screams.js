@@ -4,14 +4,12 @@ exports.getAllScreams = (req, res) => {
   db.collection('screams')
     .orderBy('createdAt', 'desc')
     .get()
-    .then(data => {
+    .then(querySnapshot => {
       let screams = [];
-      data.forEach(doc =>
+      querySnapshot.forEach(docSnapshot =>
         screams.push({
           id: doc.id,
-          body: doc.data().body,
-          userHandle: doc.data().userHandle,
-          createdAt: doc.data().createdAt
+          ...docSnapshot.data()
         })
       );
       return res.json(screams);
@@ -80,7 +78,7 @@ exports.getScream = (req, res) => {
 exports.commentOnScream = (req, res) => {
   const { body, user, params } = req;
   if (!body.body.trim()) {
-    return res.status(400).json({ error: 'Must not be empty' });
+    return res.status(400).json({ comment: 'Must not be empty' });
   }
 
   const newComment = {

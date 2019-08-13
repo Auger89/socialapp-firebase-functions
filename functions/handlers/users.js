@@ -61,7 +61,9 @@ exports.signup = (req, res) => {
       if (err.code === AUTH_EMAIL_IN_USE) {
         return res.status(400).json({ email: 'Email is already in use' });
       }
-      return res.status(500).json({ error: err.code });
+      return res
+        .status(500)
+        .json({ general: 'Something went wrong, please try again' });
     });
 };
 
@@ -81,12 +83,9 @@ exports.login = (req, res) => {
     .then(token => res.json({ token }))
     .catch(err => {
       console.log(err);
-      if (err.code === AUTH_WRONG_PASSWORD) {
-        return res
-          .status(403)
-          .json({ general: 'Wrong credentials. Please try again' });
-      }
-      return res.status(500).json({ error: err.code });
+      return res
+        .status(403)
+        .json({ general: 'Wrong credentials. Please try again' });
     });
 };
 
