@@ -197,3 +197,49 @@ exports.uploadImage = (req, res) => {
 
   busboy.end(rawBody);
 };
+
+exports.getUserDetails = (req, res) => {
+  const { params } = req;
+  let userData;
+  db.doc(`users/${params.handle}`)
+    .get()
+    .then(docSnapshot => {
+      if (docSnapshot.exists) {
+        userData = { ...docSnapshot.data(), screams: [] };
+        return db
+          .collection('screams')
+          .where('userHandle', '==', params.handle)
+          .orderBy('createdAt', 'desc')
+          .get();
+      }
+      return res.status(404).json({ error: 'User not found' });
+    })
+    .then(querySnapshot => {
+      querySnapshot.forEach(doc =>
+        userData.screams.push({ ...doc.data(), id: doc.id })
+      );
+      return res.json(userData);
+    })
+    .catch(err => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    });
+};
+
+exports.markNotificationsRead = (req, res) => {
+  const { body } = req;
+  let batch = db.batch();
+
+  body.forEach(notificationId => {
+    const notificationRef = db.doc(`/notifications/${notificationId}`);
+    batch.update(notificationRef, { read: true });
+  });
+
+  batch
+    .commit()
+    .then(() => res.json({ message: 'Notificacions marked read' }))
+    .catch(err => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    });
+};
