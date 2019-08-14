@@ -21,9 +21,6 @@ const {
 const FBAuth = require('./util/fbAuth');
 const { db } = require('./util/admin');
 
-// TODO Section
-// - Add ESLint
-
 const app = express();
 
 // scream routes

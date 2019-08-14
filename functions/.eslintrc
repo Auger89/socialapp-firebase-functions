@@ -1,0 +1,21 @@
+{
+  "extends": [
+    "airbnb-base",
+    "plugin:promise/recommended",
+    "plugin:node/recommended",
+    "prettier"
+  ],
+  "plugins": ["promise", "node"],
+  "rules": {
+    "global-require": "off",
+    "linebreak-style": "off",
+    "promise/avoid-new": "off",
+    "func-names": "off",
+    "node/no-unpublished-require": "off",
+    "class-methods-use-this": "off",
+    "consistent-return": "off"
+  },
+  "env": {
+    "node": true
+  }
+}
