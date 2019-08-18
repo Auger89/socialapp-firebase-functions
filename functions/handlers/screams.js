@@ -121,9 +121,8 @@ exports.likeScream = (req, res) => {
       if (doc.exists) {
         screamData = { ...doc.data(), screamId: doc.id };
         return likeDocument.get();
-      } else {
-        return res.status(404).json({ error: 'Scream not found' });
       }
+      return res.status(404).json({ error: 'Scream not found' });
     })
     .then(data => {
       if (data.empty) {
@@ -164,9 +163,8 @@ exports.unlikeScream = (req, res) => {
       if (doc.exists) {
         screamData = { ...doc.data(), screamId: doc.id };
         return likeDocument.get();
-      } else {
-        return res.status(404).json({ error: 'Scream not found' });
       }
+      return res.status(404).json({ error: 'Scream not found' });
     })
     .then(data => {
       if (data.empty) {
@@ -176,7 +174,7 @@ exports.unlikeScream = (req, res) => {
         .doc(`/likes/${data.docs[0].id}`)
         .delete()
         .then(() => {
-          screamData.likeCount--;
+          screamData.likeCount -= 1;
           return screamDocument.update({ likeCount: screamData.likeCount });
         })
         .then(() => res.json(screamData));

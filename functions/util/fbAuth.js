@@ -7,7 +7,8 @@ module.exports = (req, res, next) => {
   let idToken;
 
   if (authorization && authorization.startsWith('Bearer ')) {
-    idToken = authorization.split('Bearer ')[1];
+    const [, token] = authorization.split('Bearer ');
+    idToken = token;
   } else {
     console.error('No token found');
     return res.status(403).json({ error: 'Unauthorized' });

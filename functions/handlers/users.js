@@ -13,7 +13,6 @@ const {
 
 firebase.initializeApp(config);
 
-const AUTH_WRONG_PASSWORD = 'auth/wrong-password';
 const AUTH_EMAIL_IN_USE = 'auth/email-already-in-use';
 const NO_IMG = 'no-img.png';
 
@@ -37,9 +36,8 @@ exports.signup = (req, res) => {
     .then(doc => {
       if (doc.exists) {
         return res.status(400).json({ handle: 'This handle is already taken' });
-      } else {
-        return firebase.auth().createUserWithEmailAndPassword(email, password);
       }
+      return firebase.auth().createUserWithEmailAndPassword(email, password);
     })
     .then(data => {
       const userCredentials = {
@@ -91,7 +89,7 @@ exports.login = (req, res) => {
 
 exports.addUserDetails = (req, res) => {
   const { body, user } = req;
-  let userDetails = reduceUserDetails(body);
+  const userDetails = reduceUserDetails(body);
 
   db.doc(`/users/${user.handle}`)
     .update(userDetails)
@@ -104,7 +102,7 @@ exports.addUserDetails = (req, res) => {
 
 exports.getAuthenticatedUser = (req, res) => {
   const { user } = req;
-  let userData = { credentials: {}, likes: [], notifications: [] };
+  const userData = { credentials: {}, likes: [], notifications: [] };
 
   db.doc(`/users/${user.handle}`)
     .get()
@@ -227,7 +225,7 @@ exports.getUserDetails = (req, res) => {
 
 exports.markNotificationsRead = (req, res) => {
   const { body } = req;
-  let batch = db.batch();
+  const batch = db.batch();
 
   body.forEach(notificationId => {
     const notificationRef = db.doc(`/notifications/${notificationId}`);

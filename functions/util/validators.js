@@ -4,7 +4,7 @@ const isEmail = email => email.match(EMAIL_REGEX);
 
 exports.validateSignupData = data => {
   const { email, password, confirmPassword, handle } = data;
-  let errors = {};
+  const errors = {};
 
   if (isEmpty(email)) {
     errors.email = 'Must not be empty';
@@ -26,7 +26,7 @@ exports.validateSignupData = data => {
 
 exports.validateLoginData = data => {
   const { email, password } = data;
-  let errors = {};
+  const errors = {};
 
   if (isEmpty(email)) errors.email = 'Must not be empty';
   if (isEmpty(password)) errors.password = 'Must not be empty';
@@ -35,7 +35,7 @@ exports.validateLoginData = data => {
 };
 
 exports.reduceUserDetails = ({ bio, website, location }) => {
-  let userDetails = {};
+  const userDetails = {};
 
   if (!isEmpty(bio.trim())) {
     userDetails.bio = bio.trim();
