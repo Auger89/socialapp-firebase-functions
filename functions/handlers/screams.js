@@ -8,7 +8,7 @@ exports.getAllScreams = (req, res) => {
       let screams = [];
       querySnapshot.forEach(docSnapshot =>
         screams.push({
-          id: doc.id,
+          id: docSnapshot.id,
           ...docSnapshot.data()
         })
       );
