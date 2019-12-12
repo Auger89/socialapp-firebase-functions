@@ -61,7 +61,7 @@ exports.signup = (req, res) => {
       if (err.code === AUTH_WEAK_PASSWORD) {
         return res
           .status(400)
-          .json({ email: 'Password should be at least 6 characters' });
+          .json({ password: 'Password should be at least 6 characters' });
       }
       return res
         .status(500)
