@@ -20,8 +20,12 @@ const {
 } = require('./handlers/users');
 const FBAuth = require('./util/fbAuth');
 const { db } = require('./util/admin');
+const cors = require('cors');
 
 const app = express();
+
+// Allow cross-origin requests
+app.use(cors({ origin: true }));
 
 // scream routes
 app.get('/screams', getAllScreams);
