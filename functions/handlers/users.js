@@ -21,7 +21,7 @@ exports.signup = (req, res) => {
   const {
     body: { email, password, confirmPassword, handle }
   } = req;
-  let token;
+  let token, userId;
 
   const { valid, errors } = validateSignupData({
     email,
@@ -41,14 +41,18 @@ exports.signup = (req, res) => {
       return firebase.auth().createUserWithEmailAndPassword(email, password);
     })
     .then(data => {
+      userId = data.user.uid;
+      return data.user.getIdToken();
+    })
+    .then(idToken => {
+      token = idToken;
       const userCredentials = {
         handle,
         email,
-        userId: data.user.uid,
+        userId,
         createdAt: new Date().toISOString(),
         imageUrl: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${NO_IMG}?alt=media`
       };
-      token = data.user.getIdToken();
 
       return db.doc(`users/${handle}`).set(userCredentials);
     })
