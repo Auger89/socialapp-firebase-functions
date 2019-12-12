@@ -14,6 +14,7 @@ const {
 firebase.initializeApp(config);
 
 const AUTH_EMAIL_IN_USE = 'auth/email-already-in-use';
+const AUTH_WEAK_PASSWORD = 'auth/weak-password';
 const NO_IMG = 'no-img.png';
 
 exports.signup = (req, res) => {
@@ -45,9 +46,7 @@ exports.signup = (req, res) => {
         email,
         userId: data.user.uid,
         createdAt: new Date().toISOString(),
-        imageUrl: `https://firebasestorage.googleapis.com/v0/b/${
-          config.storageBucket
-        }/o/${NO_IMG}?alt=media`
+        imageUrl: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${NO_IMG}?alt=media`
       };
       token = data.user.getIdToken();
 
@@ -58,6 +57,11 @@ exports.signup = (req, res) => {
       console.log(err);
       if (err.code === AUTH_EMAIL_IN_USE) {
         return res.status(400).json({ email: 'Email is already in use' });
+      }
+      if (err.code === AUTH_WEAK_PASSWORD) {
+        return res
+          .status(400)
+          .json({ email: 'Password should be at least 6 characters' });
       }
       return res
         .status(500)
@@ -174,9 +178,7 @@ exports.uploadImage = (req, res) => {
         }
       })
       .then(() => {
-        const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${
-          config.storageBucket
-        }/o/${imageFilename}?alt=media`;
+        const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${imageFilename}?alt=media`;
         return db.doc(`/users/${user.handle}`).update({ imageUrl });
       })
       .then(() => {
