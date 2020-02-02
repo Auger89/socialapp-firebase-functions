@@ -1,23 +1,146 @@
 {
-	"users": [
-		{
-			"createdAt": "2019-07-09T22:21:35.252Z",
-			"email": "user@mail.com",
-			"handle": "user",
-			"imageUrl": "image/220792365.jpg",
-			"userId": "H1C3ZDRnWRVsqS2AmI123GHD123X",
-			"bio": "Hi, I am user!",
-			"website": "http://www.user.com",
-			"location": "London, UK"
+	"user": {
+		"$id": "https://social-app-45dd0.firebaseio.com/users.schema.json",
+		"$schema": "http://json-schema.org/schema#",
+		"description": "A user",
+		"type": "object",
+		"properties": {
+			"userId": {
+				"type": "string",
+				"description": "User unique identifier"
+			},
+			"handle": {
+				"type": "string",
+				"description": "User name"
+			},
+			"email": {
+				"type": "string",
+				"description": "The user email"
+			},
+			"createdAt": {
+				"type": "string",
+				"description": "The date the user was created"
+			},
+			"imageUrl": {
+				"type": "string",
+				"description": "Url to stored image of user"
+			},
+			"bio": {
+				"type": "string",
+				"description": "User biography"
+			},
+			"website": {
+				"type": "string",
+				"description": "User's website url"
+			},
+			"location": {
+				"type": "string",
+				"description": "User location"
+			}
 		}
-	],
-	"screams": [
-		{
-			"userHandle": "user",
-			"body": "This is a sample scream",
-			"createdAd": "2019-07-28T16:33:33.750Z",
-			"likeCount": 5,
-			"commentCount": 3
+	},
+	"scream": {
+		"$id": "https://social-app-45dd0.firebaseio.com/scream.schema.json",
+		"$schema": "http://json-schema.org/schema#",
+		"description": "A post",
+		"type": "object",
+		"properties": {
+			"userHandle": {
+				"type": "string",
+				"description": "User name"
+			},
+			"body": {
+				"type": "string",
+				"description": "The content of the post"
+			},
+			"createdAt": {
+				"type": "string",
+				"description": "The date the post was created"
+			},
+			"likeCount": {
+				"type": "number",
+				"description": "Number of likes"
+			},
+			"commentCount": {
+				"type": "number",
+				"description": "Number of comments"
+			}
 		}
-	]
+	},
+	"like": {
+		"$id": "https://social-app-45dd0.firebaseio.com/like.schema.json",
+		"$schema": "http://json-schema.org/schema#",
+		"description": "A user like to a specific post",
+		"type": "object",
+		"properties": {
+			"screamId": {
+				"type": "string",
+				"description": "The id of the related post"
+			},
+			"userHandle": {
+				"type": "string",
+				"description": "User name"
+			}
+		}
+	},
+	"comment": {
+		"$id": "https://social-app-45dd0.firebaseio.com/comment.schema.json",
+		"$schema": "http://json-schema.org/schema#",
+		"description": "A user comment to a specific post",
+		"type": "object",
+		"properties": {
+			"screamId": {
+				"type": "string",
+				"description": "The id of the related post"
+			},
+			"userHandle": {
+				"type": "string",
+				"description": "User name"
+			},
+			"body": {
+				"type": "string",
+				"description": "The content of the comment"
+			},
+			"userImage": {
+				"type": "string",
+				"description": "Url to stored image of user"
+			},
+			"createdAt": {
+				"type": "string",
+				"description": "The date the comment was created"
+			}
+		}
+	},
+	"notification": {
+		"$id": "https://social-app-45dd0.firebaseio.com/notification.schema.json",
+		"$schema": "http://json-schema.org/schema#",
+		"description": "A notification for a user",
+		"type": "object",
+		"properties": {
+			"screamId": {
+				"type": "string",
+				"description": "The id of the related post"
+			},
+			"recipient": {
+				"type": "string",
+				"description": "The user receiving the notification"
+			},
+			"sender": {
+				"type": "string",
+				"description": "The user that triggered the notification"
+			},
+			"type": {
+				"type": "string",
+				"description": "The type of the notification"
+			},
+			"read": {
+				"type": "boolean",
+				"description": "Indicates if the recipient has read the message"
+			},
+			"createdAt": {
+				"type": "string",
+				"description": "The date the notification was created"
+			}
+		}
+	}
 }
