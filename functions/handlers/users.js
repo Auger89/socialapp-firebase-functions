@@ -119,7 +119,7 @@ exports.getAuthenticatedUser = (req, res) => {
         userData.credentials = doc.data();
         return db
           .collection('likes')
-          .where('userhandle', '==', user.handle)
+          .where('userHandle', '==', user.handle)
           .get(0);
       }
     })
