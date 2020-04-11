@@ -13,7 +13,9 @@
     "func-names": "off",
     "node/no-unpublished-require": "off",
     "class-methods-use-this": "off",
-    "consistent-return": "off"
+    "consistent-return": "off",
+    "node/no-unsupported-features/es-syntax": "off",
+    "no-useless-escape": "off"
   },
   "env": {
     "node": true
