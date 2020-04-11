@@ -21,7 +21,8 @@ exports.signup = (req, res) => {
   const {
     body: { email, password, confirmPassword, handle }
   } = req;
-  let token, userId;
+  let token;
+  let userId;
 
   const { valid, errors } = validateSignupData({
     email,
@@ -122,6 +123,7 @@ exports.getAuthenticatedUser = (req, res) => {
           .where('userHandle', '==', user.handle)
           .get(0);
       }
+      return [];
     })
     .then(data => {
       data.forEach(doc => userData.likes.push(doc.data()));
@@ -208,7 +210,7 @@ exports.getUserDetails = (req, res) => {
     .get()
     .then(docSnapshot => {
       if (docSnapshot.exists) {
-        userData = { ...docSnapshot.data(), screams: [] };
+        userData = { user: docSnapshot.data(), screams: [] };
         return db
           .collection('screams')
           .where('userHandle', '==', params.handle)

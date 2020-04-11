@@ -5,7 +5,7 @@ exports.getAllScreams = (req, res) => {
     .orderBy('createdAt', 'desc')
     .get()
     .then(querySnapshot => {
-      let screams = [];
+      const screams = [];
       querySnapshot.forEach(docSnapshot =>
         screams.push({
           id: docSnapshot.id,
@@ -133,7 +133,7 @@ exports.likeScream = (req, res) => {
             userHandle: user.handle
           })
           .then(() => {
-            screamData.likeCount++;
+            screamData.likeCount += 1;
             return screamDocument.update({ likeCount: screamData.likeCount });
           })
           .then(() => res.json(screamData));

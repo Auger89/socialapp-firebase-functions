@@ -1,5 +1,6 @@
 const functions = require('firebase-functions');
 const express = require('express');
+const cors = require('cors');
 const {
   getAllScreams,
   createScream,
@@ -20,7 +21,6 @@ const {
 } = require('./handlers/users');
 const FBAuth = require('./util/fbAuth');
 const { db } = require('./util/admin');
-const cors = require('cors');
 
 const app = express();
 
@@ -68,6 +68,7 @@ exports.createNotificationsOnLike = functions
             screamId: doc.id
           });
         }
+        throw new Error('Scream does not exist or belong to user');
       })
       .catch(err => console.error(err));
   });
@@ -103,6 +104,7 @@ exports.createNotificationsOnComment = functions
             screamId: doc.id
           });
         }
+        throw new Error('Comment does not exist or belong to user');
       })
       .catch(err => console.error(err));
   });
